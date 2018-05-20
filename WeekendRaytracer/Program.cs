@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 
 namespace WeekendRayTracer
 {
@@ -19,9 +20,12 @@ namespace WeekendRayTracer
                     float r = (float)i / (float)nx;
                     float g = (float)j / (float)ny;
                     float b = 0.2f;
-                    int ir = (int)(255.99 * r);
-                    int ig = (int)(255.99 * g);
-                    int ib = (int)(255.99 * b);
+
+					Vector3 vector = new Vector3(r, g, b);
+
+                    int ir = (int)(255.99 * vector.X);
+                    int ig = (int)(255.99 * vector.Y);
+                    int ib = (int)(255.99 * vector.Z);
 
                     ppmFile.Write("{0} {1} {2}\n", ir, ig, ib);
                 }
