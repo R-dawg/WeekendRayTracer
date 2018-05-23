@@ -1,31 +1,42 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using WeekendRaytracer;
 
 namespace WeekendRayTracer
 {
     public class Program
     {
+		public static Vector3 color(Ray r)
+		{
+			Vector3 unitDirection = r.direction() / r.direction().Length();
+			float t = 0.5f * (unitDirection.Y + 1.0f);
+			return Vector3.Lerp(new Vector3(1.0f), new Vector3(0.5f, 0.7f, 1.0f), t);
+		}
         public static void Main()
         {
             int nx = 200;
             int ny = 100;
             StreamWriter ppmFile = new StreamWriter("trace.ppm");
-
+            
             ppmFile.Write("P3\n {0} {1}\n255\n", nx, ny);
+
+			Vector3 lower_left_corner = new Vector3(2.0f, -1.0f, -1.0f);
+			Vector3 horizontal = new Vector3(4.0f, 0.0f, 0.0f);
+			Vector3 vertical = new Vector3(0.0f, 2.0f, 0.0f);
+			Vector3 origin = new Vector3(0.0f);
+
             for (int j = ny - 1; j >= 0; j--)
             {
                 for (int i = 0; i < nx; i++)
                 {
-                    float r = (float)i / (float)nx;
-                    float g = (float)j / (float)ny;
-                    float b = 0.2f;
-
-					Vector3 vector = new Vector3(r, g, b);
-
-                    int ir = (int)(255.99 * vector.X);
-                    int ig = (int)(255.99 * vector.Y);
-                    int ib = (int)(255.99 * vector.Z);
+                    float u = (float)i / (float)nx;
+                    float v = (float)j / (float)ny;
+					Ray r = new Ray(origin, lower_left_corner + u*horizontal + v*vertical);
+					Vector3 col = color(r);
+                    int ir = (int)(255.99 * col.X);
+                    int ig = (int)(255.99 * col.Y);
+                    int ib = (int)(255.99 * col.Z);
 
                     ppmFile.Write("{0} {1} {2}\n", ir, ig, ib);
                 }
