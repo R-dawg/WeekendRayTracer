@@ -7,12 +7,27 @@ namespace WeekendRayTracer
 {
     public class Program
     {
+		public static Boolean hitSphere(Vector3 center, float radius, Ray r)
+        {         
+			Vector3 oc = r.origin() - center;
+            float a = Vector3.Dot(r.direction(), r.direction());
+            float b = 2.0f * Vector3.Dot(r.direction(),oc);
+            float c = Vector3.Dot(oc, oc) - radius * radius;
+            float discriminant = b * b - 4 * a * c;
+            
+			return discriminant > 0;
+        }
+        
 		public static Vector3 color(Ray r)
 		{
+            if(hitSphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, r))
+				return new Vector3(1.0f, 0.0f, 0.0f);
+
 			Vector3 unitDirection = r.direction() / r.direction().Length();
 			float t = 0.5f * (unitDirection.Y + 1.0f);
 			return Vector3.Lerp(new Vector3(1.0f), new Vector3(0.5f, 0.7f, 1.0f), t);
 		}
+
         public static void Main()
         {
             int nx = 200;
@@ -21,7 +36,7 @@ namespace WeekendRayTracer
             
             ppmFile.Write("P3\n {0} {1}\n255\n", nx, ny);
 
-			Vector3 lower_left_corner = new Vector3(2.0f, -1.0f, -1.0f);
+			Vector3 lower_left_corner = new Vector3(-2.0f, -1.0f, -1.0f);
 			Vector3 horizontal = new Vector3(4.0f, 0.0f, 0.0f);
 			Vector3 vertical = new Vector3(0.0f, 2.0f, 0.0f);
 			Vector3 origin = new Vector3(0.0f);
