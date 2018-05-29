@@ -7,7 +7,7 @@ namespace WeekendRayTracer
 {
     public class Program
     {
-		public static Boolean hitSphere(Vector3 center, float radius, Ray r)
+		public static float hitSphere(Vector3 center, float radius, Ray r)
         {         
 			Vector3 oc = r.origin() - center;
             float a = Vector3.Dot(r.direction(), r.direction());
@@ -15,16 +15,24 @@ namespace WeekendRayTracer
             float c = Vector3.Dot(oc, oc) - radius * radius;
             float discriminant = b * b - 4 * a * c;
             
-			return discriminant > 0;
+			if (discriminant < 0)
+				return -1.0f;
+			else
+				return (-b - (float)Math.Sqrt(discriminant)) / (2.0f * a);
         }
         
 		public static Vector3 color(Ray r)
 		{
-            if(hitSphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, r))
-				return new Vector3(1.0f, 0.0f, 0.0f);
-
+			float t = hitSphere(new Vector3(0.0f, 0.0f, -1.0f), 0.5f, r);
+			if(t > 0.0f)
+			{
+				Vector3 N = r.point_at_parameter(t) / r.point_at_parameter(t).Length()
+				             - new Vector3(0,0,-1);
+				return 0.5f * new Vector3(N.X + 1, N.Y + 1, N.Z + 1);
+			}
+            
 			Vector3 unitDirection = r.direction() / r.direction().Length();
-			float t = 0.5f * (unitDirection.Y + 1.0f);
+			t = 0.5f * (unitDirection.Y + 1.0f);
 			return Vector3.Lerp(new Vector3(1.0f), new Vector3(0.5f, 0.7f, 1.0f), t);
 		}
 
