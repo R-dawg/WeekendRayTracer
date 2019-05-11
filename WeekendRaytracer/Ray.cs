@@ -4,6 +4,9 @@ using System.Numerics;
 
 namespace WeekendRaytracer
 {
+	/// <summary>
+	/// Ray of light
+	/// </summary>
     public class Ray
     {
 		public Vector3 A;
@@ -13,6 +16,11 @@ namespace WeekendRaytracer
         {			
         }
 
+		/// <summary>
+		/// Ray of light
+		/// </summary>
+		/// <param name="a">origin of the light</param>
+		/// <param name="b">direction the light is traveling</param>
         public Ray(Vector3 a, Vector3 b)
 		{
 			A = a;
