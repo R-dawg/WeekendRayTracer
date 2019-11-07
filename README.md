@@ -5,3 +5,6 @@ Raytracer In A Weekend
 
 11/06/19
 Added project to TeamCity for experimentation
+
+11/07/19
+Testing migrated TC build
